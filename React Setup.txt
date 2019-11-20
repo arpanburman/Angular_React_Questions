@@ -1,0 +1,190 @@
+Environment Setup
+------------------
+npm i -g create-react-app
+npx create-react-app my-app
+cd my-app
+npm start
+Production Build: npm run build
+create Server.js->npm i nodemon -g
+npm install json-server --save
+
+Native
+******
+npm install -g create-react-native-app
+create-react-native-app my-app
+install expo client for play store
+
+Redux
+*****
+npm install --save redux
+npm install --save-dev babel-plugin-transform-react-jsx
+
+Bootstrap
+*********
+npm install bootstrap
+
+https://dzone.com/articles/spring-boot-and-postgresql
+https://github.com/RajeshBhojwani/springboot-postgresql
+
+Component
+---------
+1.Props
+2.State
+
+props and State diff?
+In a React component, props are variables passed to it by its parent component. State on the other hand is still variables, but directly initialized and managed by the component.
+Use state to store the data your current page needs in your controller-view.
+Use props to pass data & event handlers down to your child components.
+These lists should help guide you when working with data in your components.
+Props
+-----
+are immutable
+which lets React do fast reference checks
+are used to pass data down from your view-controller
+your top level component
+have better performance
+use this to pass data to child components
+State
+------
+should be managed in your view-controller
+your top level component
+is mutable
+has worse performance
+should not be accessed from child components
+pass it down with props instead
+private data for component
+setState triggers for re-render
+smart, async,optimized
+state() use for render 
+
+
+ReactDOM.render
+_______________
+Render a React element into the DOM in the supplied container and return a reference to the component (or returns null for stateless components).
+If the React element was previously rendered into container, this will perform an update on it and only mutate the DOM as necessary to reflect the latest React element.
+If the optional callback is provided, it will be executed after the component is rendered or updated.
+Note:
+ReactDOM.render(element, container[, callback])
+ReactDOM.render() controls the contents of the container node you pass in. Any existing DOM elements inside are replaced when first called. Later calls use React’s DOM diffing algorithm for efficient updates.
+ReactDOM.render() does not modify the container node (only modifies the children of the container). It may be possible to insert a component to an existing DOM node without overwriting the existing children.
+ReactDOM.render() currently returns a reference to the root ReactComponent instance. However, using this return value is legacy and should be avoided because future versions of React may render components asynchronously in some cases. If you need a reference to the root ReactComponent instance, the preferred solution is to attach a callback ref to the root element.
+If you load React from a <script> tag, these top-level APIs are available on the ReactDOM global. If you use ES6 with npm, you can write import ReactDOM from 'react-dom'. If you use ES5 with npm, you can write var ReactDOM = require('react-dom').
+
+React Hook
+--------------
+Basic Hooks
+
+useState
+useEffect
+useContext
+
+Additional Hooks
+
+useReducer
+useCallback
+useMemo
+useRef
+useImperativeHandle
+useLayoutEffect
+useDebugValue
+
+UseState()--> Here, useState is a Hook (we’ll talk about what this means in a moment). We call it inside a function component to add some local state to it. React will preserve this state between re-renders. useState returns a pair: the current state value and a function that lets you update it. You can call this function from an event handler or somewhere else. It’s similar to this.setState in a class, except it doesn’t merge the old and new state together. (We’ll show an example comparing useState to this.state.
+
+import React, { useState } from 'react';
+
+function Example() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+useRef()--> useRef returns a mutable ref object whose .current property is initialized to the passed argument (initialValue). The returned object will persist for the full lifetime of the component.
+
+function TextInputWithFocusButton() {
+  const inputEl = useRef(null);
+  const onButtonClick = () => {
+    // `current` points to the mounted text input element
+    inputEl.current.focus();
+  };
+  return (
+    <>
+      <input ref={inputEl} type="text" />
+      <button onClick={onButtonClick}>Focus the input</button>
+    </>
+  );
+}
+
+useEffect() --> Accepts a function that contains imperative, possibly effectful code.
+Mutations, subscriptions, timers, logging, and other side effects are not allowed inside the main body of a function component (referred to as React’s render phase). Doing so will lead to confusing bugs and inconsistencies in the UI.
+
+useEffect(() => {
+  const subscription = props.source.subscribe();
+  return () => {
+    // Clean up the subscription
+    subscription.unsubscribe();
+  };
+});
+
+useContext() --> Accepts a context object (the value returned from React.createContext) and returns the current context value for that context. The current context value is determined by the value prop of the nearest <MyContext.Provider> above the calling component in the tree.
+When the nearest <MyContext.Provider> above the component updates, this Hook will trigger a rerender with the latest context value passed to that MyContext provider.
+Don’t forget that the argument to useContext must be the context object itself:
+Correct: useContext(MyContext)
+Incorrect: useContext(MyContext.Consumer)
+Incorrect: useContext(MyContext.Provider)
+
+useReducer() --> An alternative to useState. Accepts a reducer of type (state, action) => newState, and returns the current state paired with a dispatch method. (If you’re familiar with Redux, you already know how this works.)
+
+const initialState = {count: 0};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return {count: state.count + 1};
+    case 'decrement':
+      return {count: state.count - 1};
+    default:
+      throw new Error();
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  return (
+    <>
+      Count: {state.count}
+      <button onClick={() => dispatch({type: 'decrement'})}>-</button>
+      <button onClick={() => dispatch({type: 'increment'})}>+</button>
+    </>
+  );
+}
+
+useMemo() --> Returns a memoized value.
+Pass a “create” function and an array of dependencies. useMemo will only recompute the memoized value when one of the dependencies has changed. This optimization helps to avoid expensive calculations on every render.
+const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+
+useCallback()--> Returns a memoized callback.
+Pass an inline callback and an array of dependencies. useCallback will return a memoized version of the callback that only changes if one of the dependencies has changed. This is useful when passing callbacks to optimized child components that rely on reference equality to prevent unnecessary renders (e.g. shouldComponentUpdate).
+const memoizedCallback = useCallback(
+  () => {
+    doSomething(a, b);
+  },
+  [a, b],
+);
+
+
+Map
+----
+For Rendering Multiple Components
+You can build collections of elements and include them in JSX using curly braces {}.
+
+const numbers = [1, 2, 3, 4, 5];
+const listItems = numbers.map((number) =>
+  <li>{number}</li>
+);
+
