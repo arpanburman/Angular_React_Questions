@@ -1,0 +1,85 @@
+npm install -g rimraf
+
+rimraf .gitignore
+rimraf .git
+delete App folder, index.html, main.ts
+
+create index.html
+
+write (Emmit snipets)
+------
+! (TAB)
+html>head>title{Angular}^body>p{Angular}
+p{Para-$}*10
+p#main+p.sty1.sty2+p[data-company="Capgemini"] 
+table>(tr>td{TD-$}*3)*3 
+
+
+[‎04-‎11-‎2019 15:10]  M, Karthik:  
+No Title 
+src/index.html
+--------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Angular</title>
+</head>
+<body>
+    <!--Custom Element-->
+    <app-root></app-root>
+</body>
+</html>
+
+src/main.ts
+-----------
+import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
+import { AppModule } from './app/app.module';
+
+platformBrowserDynamic().bootstrapModule(AppModule);
+
+
+src/app/app.module.ts
+---------------------
+import { NgModule  } from "@angular/core";
+import {BrowserModule} from "@angular/platform-browser";
+import { AppComponent } from "./app.component";
+
+@NgModule({
+    imports:[BrowserModule],
+    declarations:[AppComponent],
+    bootstrap:[AppComponent]
+})
+export class AppModule{}
+
+
+src/app/app.component.ts
+------------------------
+import { Component } from "@angular/core";
+
+@Component({
+    selector: 'app-root',
+    templateUrl: 'app.component.html',
+    styleUrls:[
+        'app.component.css'
+    ]
+})
+export class AppComponent { }
+
+
+src/app/app.component.html
+--------------------------
+<div>
+    <h1 class="sty">Angular</h1>
+</div>
+
+src/app/app.component.css
+--------------------------
+.sty{
+    color:blue;
+    font-size: 30px;
+    font-weight: bold;
+} 
+ 

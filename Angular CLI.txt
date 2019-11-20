@@ -1,0 +1,39 @@
+Angular CLI
+
+
+1. Use to create Angular Project and the environment to Run and develop it.
+ng new <Project>
+
+
+2. It is used to Compile and Build
+
+JIT Compilation : 
+****************
+DEVELOPMENT (NOT PRECOMPILED. It will compiler in the browser at runtime. Angular Compiler will be shipped as a part of the build)
+
+ng serve : Build files (Angular Compiler) will be served via memory and deployed in LIVE DEVELOPMENT SERVER in default port 4200
+
+ng build : Build files will be placed in the folder named dist we can run with your Favorite Webserver
+
+AOT Compilation : 
+****************
+PRODUCTION (PRECOMPILED. Angular Compiler wont be shipped as a part of the build)
+
+ng serve --aot : Precompiled build files will be served via memory and deployed in LIVE DEVELOPMENT SERVER in default port 4200
+
+ng build --aot: Precompiled build files will be placed in the folder named dist we can run the  without a Webserver (Web optimization wont be done)
+
+ng build --prod : Precompiled build files will be placed in the folder named dist we can run the  without a Webserver (Web optimized scripts will be minified)
+
+
+3. Used for Scaffolding
+
+ng g c home --dry-run --skip-tests --inline-style --inline-template --flat
+
+g: Generate
+c: Component
+--dry-run : It wont create the file just display the files which will get generated
+--skip-tests : Skip generating Test Specification files
+--inline-style: Skip generating CSS files 
+--inline-template: Skip generating HTML files 
+--flat: wont create a separate folder

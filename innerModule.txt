@@ -1,0 +1,122 @@
+src/index.html
+--------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Angular</title>
+</head>
+<body class="container">
+    <!--Custom Element-->
+    <app-root></app-root>
+</body>
+</html>
+
+src/main.ts
+-----------
+import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
+import { AppModule } from './app/app.module';
+
+platformBrowserDynamic().bootstrapModule(AppModule);
+
+src/app/app.module.ts
+----------------------
+import { NgModule  } from "@angular/core";
+import {BrowserModule} from "@angular/platform-browser";
+import { AppComponent } from "./app.component";
+import { InnerAppComponent } from './inner.app.component';
+
+@NgModule({
+    imports:[BrowserModule],
+    declarations:[AppComponent,InnerAppComponent],
+    bootstrap:[AppComponent]
+})
+export class AppModule{}
+
+src/app/app.component.ts
+------------------------
+import { Component } from "@angular/core";
+
+@Component({
+    selector: 'app-root',
+    templateUrl: 'app.component.html'
+})
+export class AppComponent {
+    parentProp:string;
+    childPropHolder:string;
+
+    constructor(){
+        this.parentProp = 'Message from AppComponent';
+        this.childPropHolder = '...';
+    }
+
+    getData(msg:string){
+        this.childPropHolder = msg;
+    }
+}
+
+src/app/app.component.html
+--------------------------
+<div>
+    <div class="jumbotron">
+      <h1 class="display-4">Nested and Component Communication</h1>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        Parent Component
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">AppComponent</h5>
+        <p class="card-text">{{ childPropHolder }}</p>
+        <hr>
+        <app-inner [parentPropHolder]="parentProp" (innerEvent)="getData($event)"></app-inner>
+      </div>
+    </div>
+</div>
+
+
+src/app/inner.app.component.ts
+--------------------------------
+import { Component, Input, EventEmitter, Output } from "@angular/core";
+
+@Component({
+    selector:'app-inner',
+    templateUrl:'inner.app.component.html'
+})
+export class InnerAppComponent{
+    @Input() //It is used to recieve the input from the parent Component
+    parentPropHolder:string;
+
+    childProp:string;
+
+    @Output()
+    innerEvent:EventEmitter<string>;
+    
+    constructor(){
+        this.childProp = 'Message from InnerAppComponent';
+        this.innerEvent = new EventEmitter<string>();
+    }
+
+    sendMsg(){
+        //Trigger the custom Event
+        this.innerEvent.emit(this.childProp);
+        
+    }
+}
+
+
+src/app/inner.app.component.html
+--------------------------------
+<div class="card">
+  <div class="card-header">
+    Child Component
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">InnerAppComponent</h5>
+    <p class="card-text">{{ parentPropHolder }}</p>
+    <hr>
+    <button type="button" class="btn btn-primary" (click)="sendMsg()">Send Data</button>
+  </div>
+</div> 

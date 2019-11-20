@@ -1,0 +1,85 @@
+Angular Installation without installers Video Link
+
+https://fts.capgemini.com/private/2409227173696/00-Angular-EnvironmentSetup.mp4 
+
+
+Angular Installation with installers Video Link
+
+https://fts.capgemini.com/private/2986809830928/01-Angular8-NodeVSCodeInstallation.mp4 
+
+Setting up Angular Environment without Installers
+-------------------------------------------------
+Step 1: Download Node js zip version from https://nodejs.org/dist/v12.13.0/node-v12.13.0-win-x64.zip and extract it to desktop 
+
+Step 2: Download Visual Studio Code from https://code.visualstudio.com/docs/?dv=winzip and extract it to desktop
+
+Step 3 : Creating PATH and NODE_PATH environment Variables which need to be executed everytime when you open the terminal
+
+SET PATH=C:\Windows\System32;D:\Users\karmuthu\Desktop\node-v12.13.0-win-x64  
+
+SET NODE_PATH=D:\Users\karmuthu\Desktop\node-v12.13.0-win-x64\node_modules  
+
+Step 4: Open Visual Studio Code by clicking Code.EXE
+
+Step 5: Open the Terminal and select Cmd as default shell
+
+Step 6: Set the PATH and NODE_PATH Environment Variables
+
+SET PATH=C:\Windows\System32;D:\Users\karmuthu\Desktop\node-v12.13.0-win-x64  
+
+SET NODE_PATH=D:\Users\karmuthu\Desktop\node-v12.13.0-win-x64\node_modules  
+
+Step 7: Verify node configured properly or not by 
+
+C:\Users\karmuthu>node -v
+v12.13.0
+
+C:\Users\karmuthu>npm -v
+6.12.0
+
+Step 8: Install node package @angular/cli as a Global Module
+
+npm install -g @angular/cli (This will install Latest version)
+npm install -g @angular/cli@1 (This will install Angular 5)
+npm install -g @angular/cli@6 (This will install Angular 6)
+npm install -g @angular/cli@7 (This will install Angular 7)
+
+To set the proxy(If any issues in installing Node Package):
+----------------------------------------------------------
+npm config set http-proxy http://blrproxy.igate.com:8080
+
+npm config set https-proxy http://blrproxy.igate.com:8080
+
+Step 9: After installation verify Angular
+
+ng --version
+
+Creating Angular Project
+-------------------------
+
+
+Step 1: Open Desktop from Visual Studio Code
+		Type cmd to open terminal as cmd mode.
+Step 2: In the terminal Set PATH and NODE_PATH and verify node, npm and ng versions
+
+node -v
+
+npm -v
+
+ng --version
+
+Step 3: Create Angular 8 Project by typing
+
+D:\Users\karmuthu\Desktop>ng new ng8-app
+? Would you like to add Angular routing? No
+? Which stylesheet format would you like to use? CSS
+
+
+Running the Angular Project
+--------------------------
+Step 1: Open the Angular Project in Visual Studio Code
+
+Step 2: Build and Run the Angular Project using
+ng serve
+
+Step 3: Open Google Chrome and type the URL http://localhost:4200 to see the default project output screen

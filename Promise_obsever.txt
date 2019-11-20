@@ -1,0 +1,170 @@
+Callback Functions
+******************
+console.log('1');
+console.log('2');
+setTimeout(function(){
+    console.log('3');
+},10);//Time to put the deferred Function in a callback queue
+setTimeout(function(){
+    console.log('6');
+},0);//Time to put the deferred Function in a callback queue
+console.log('4');
+console.log('5');
+
+
+/* Deferred Manner
+   Timer Events - setTimeOut(),SetInterval()
+   UI EVents - Click
+   XHR Events - Ajax
+*/
+
+
+var divideNumbers = function (a, b, fn) {
+    var result;
+    setTimeout(function () {
+        try {
+            if (b == 0)
+                throw 'Cannot Divide by Zero';
+            result = a / b;
+            fn(null,result);
+        } catch (err) {
+            fn(err,null);
+        }
+    }, 1000);
+}
+
+divideNumbers(25, 0, function (err,divideResult) {
+    if(err){
+        console.log('Exception Details : '+ err);
+        return;
+    }
+    console.log('Result: '+ divideResult);
+});
+
+
+
+
+  Promise
+  Arrow Function 
+  
+  In ES6 we have an alternative mechanism built into the language called a promise.A promise is a placeholder for a future value.
+It serves the same function as callbacks but has a nicer syntax and makes it easier to handle errors.
+
+var promiseObj = new Promise((resolve,reject)=>{
+    resolve(5);
+    //reject('Some Error Occured');
+});
+
+promiseObj.then((result)=>{
+    console.log(`Promise Fullfilled : ${result}`);
+},(err)=>{
+    console.log(`Promise Rejected : ${err}`);
+});
+
+
+var divideNumbers = (a, b) => {
+    var result;
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            try {
+                if (b == 0)
+                    throw 'Cannot Divide by Zero';
+                result = a / b;
+                resolve(result);
+            } catch (err) {
+                reject(err);
+            }
+        }, 1000);
+    });
+}
+
+divideNumbers(25,5).then((divideResult)=>{
+    console.log(`Result : ${divideResult}`);
+},(err)=>{
+    console.log(`Exception : ${err}`);
+}); 
+
+
+Spread Operator
+ ****************
+var person = {id:1,name:'Karthik'}
+var clonedPerson = {...person};
+/*clonedPerson.id=person.id;
+clonedPerson.name=person.name;*/
+clonedPerson.id=100;
+console.log(person);
+console.log(clonedPerson);
+
+var numbers = [1,2,3];
+var clonedNumbers = [...numbers];
+clonedNumbers[0]=100;
+console.log(numbers);
+console.log(clonedNumbers); 
+
+
+Promise Limitations:
+******************
+1. Promise are Eager Loaded
+2. Promise can be rejected or resolved with a single Value only 1 time
+3. Promises cannot be CANCELLED. 
+
+Observable
+************
+Observables provide support for passing messages between publishers and subscribers in your application. Observables offer significant benefits over other techniques for event handling, asynchronous programming, and handling multiple values.
+Observables are declarative—that is, you define a function for publishing values, but it is not executed until a consumer subscribes to it. The subscribed consumer then receives notifications until the function completes, or until they unsubscribe.
+An observable can deliver multiple values of any type—literals, messages, or events, depending on the context. The API for receiving values is the same whether the values are delivered synchronously or asynchronously. Because setup and teardown logic are both handled by the observable, your application code only needs to worry about subscribing to consume values, and when done, unsubscribing. Whether the stream was keystrokes, an HTTP response, or an interval timer, the interface for listening to values and stopping listening is the same.
+next	-Required. A handler for each delivered value. Called zero or more times after execution starts.
+error	-Optional. A handler for an error notification. An error halts execution of the observable instance.
+complete	-Optional. A handler for the execution-complete notification. Delayed values can continue to be delivered to the next handler after execution is complete.
+
+
+Observables compared to promises
+********************************
+Observables are often compared to promises. Here are some key differences:
+Observables are declarative; computation does not start until subscription. Promises execute immediately on creation. This makes observables useful for defining recipes that can be run whenever you need the result.
+Observables provide many values. Promises provide one. This makes observables useful for getting multiple values over time.
+Observables differentiate between chaining and subscription. Promises only have .then() clauses. This makes observables useful for creating complex transformation recipes to be used by other part of the system, without causing the work to be executed.
+Observables subscribe() is responsible for handling errors. Promises push errors to the child promises. This makes observables useful for centralized and predictable error handling.
+
+Creation and subscription
+****************************
+Observables are not executed until a consumer subscribes. The subscribe() executes the defined behavior once, and it can be called again. Each subscription has its own computation. Resubscription causes recomputation of values.
+// declare a publishing operation
+new Observable((observer) => { subscriber_fn });
+// initiate execution
+observable.subscribe(() => {
+  // observer handles notifications
+});
+Promises execute immediately, and just once. The computation of the result is initiated when the promise is created. There is no way to restart work. All then clauses (subscriptions) share the same computation.
+// initiate execution
+new Promise((resolve, reject) => { executer_fn });
+// handle return value
+promise.then((value) => {
+  // handle result here
+});
+
+Chaining
+********
+Observables differentiate between transformation function such as a map and subscription. Only subscription activates the subscriber function to start computing the values.
+observable.pipe(map((v) => 2*v));
+Promises do not differentiate between the last .then clauses (equivalent to subscription) and intermediate .then clauses (equivalent to map).
+promise.then((v) => 2*v);
+
+Cancellation
+************
+Observable subscriptions are cancellable. Unsubscribing removes the listener from receiving further values, and notifies the subscriber function to cancel work.
+const sub = obs.subscribe(...);
+sub.unsubscribe();
+Promises are not cancellable.
+
+Error handling
+*************
+Observable execution errors are delivered to the subscriber's error handler, and the subscriber automatically unsubscribes from the observable
+obs.subscribe(() => {
+  throw Error('my error');
+});
+
+Promises push errors to the child promises.
+promise.then(() => {
+  throw Error('my error');
+});

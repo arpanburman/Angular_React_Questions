@@ -1,0 +1,50 @@
+import { Component } from "@angular/core";
+import { Observable, of, range } from 'rxjs';
+import { tap, map, filter, skip, take } from "rxjs/operators";
+
+@Component({
+    selector: 'app-root',
+    templateUrl: 'app.component.html'
+})
+export class AppComponent {
+    promiseObj: Promise<number>;
+    observableObj$: Observable<number>;
+    strObservableObj$: Observable<string>;
+    numbers$: Observable<number>;
+
+    constructor() {
+        this.promiseObj = new Promise<number>((resolve, reject) => { resolve(5); });
+
+        this.promiseObj.then((data: number) => {
+            console.log(data);
+        });
+
+        this.observableObj$ = new Observable((observer) => {
+            observer.next(5);
+            observer.next(10);
+            observer.error('Some Error Occured');
+            observer.next(15);
+            observer.complete();
+        });
+
+        this.observableObj$.subscribe((data: number) => {
+            console.log(`Number : ${data}`);
+        }, (err) => {
+            console.log(`Error : ${err}`);
+        }, () => {
+            console.log(`All data retrieved. Transaction Completed`);
+        });
+
+        this.strObservableObj$ = of('Karthik');
+
+        this.numbers$ = range(1, 10).pipe(tap((n) => {
+            console.log(`Tapping ${n}`);
+        }), map((n) => n * 3), filter((n) => n % 2 == 0),skip(2),take(2));
+
+        this.numbers$.subscribe((data: number) => {
+            console.log(`Data : ${data}`);
+        });
+
+    }
+
+} 

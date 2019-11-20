@@ -1,0 +1,182 @@
+src/index.html
+--------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Angular</title>
+</head>
+<body class="container">
+    <!--Custom Element-->
+    <app-root></app-root>
+</body>
+</html>
+
+src/main.ts
+-----------
+import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
+import { AppModule } from './app/app.module';
+
+platformBrowserDynamic().bootstrapModule(AppModule);
+
+src/app/app.module.ts
+----------------------
+import { NgModule  } from "@angular/core";
+import {BrowserModule} from "@angular/platform-browser";
+import { AppComponent } from "./app.component";
+import { CgButtonHoverDirective } from './directives/cg.button.hover.directive';
+
+@NgModule({
+    imports:[BrowserModule],
+    declarations:[AppComponent,CgButtonHoverDirective],
+    bootstrap:[AppComponent]
+})
+export class AppModule{}
+
+
+src/app/models/employee.ts
+--------------------------
+export interface Employee{
+    id:number,
+    name:string,
+    department?:string //Optional
+}
+
+
+src/app/directives/cg.button.hover.directive.ts
+----------------------------------------------
+import { Directive, HostBinding, HostListener } from '@angular/core';
+
+@Directive({
+    selector:'[cgBtn]'
+})
+export class CgButtonHoverDirective{
+    @HostBinding('title')
+    directiveTitle:string;
+
+    constructor(){
+        this.directiveTitle = 'Title from Custom Directive';
+    }
+
+    @HostListener('mouseenter',['$event'])
+    entry(event:MouseEvent){
+       var targetElement = <HTMLButtonElement>event.target;
+       var styleToBeApplied = targetElement.getAttribute('data-sty');
+       targetElement.classList.add(styleToBeApplied);
+    }
+
+    @HostListener('mouseleave',['$event'])
+    exit(event:MouseEvent){
+       var targetElement = <HTMLButtonElement>event.target;
+       var styleToBeRemoved = targetElement.getAttribute('data-sty');
+       targetElement.classList.remove(styleToBeRemoved);
+    }
+}
+
+
+
+src/app/app.component.ts
+------------------------
+import { Component } from "@angular/core";
+import { Employee } from './models/employee';
+
+@Component({
+    selector: 'app-root',
+    templateUrl: 'app.component.html'
+})
+export class AppComponent {
+    show: boolean;
+    employees: Array<Employee>;
+    counter:number;
+    isPrimary:boolean;
+
+    constructor() {
+        this.isPrimary = true;
+        this.counter = 0;
+        this.show = true;
+        this.employees = [
+            { id: 101, name: 'Karthik' },
+            { id: 102, name: 'Ashik' },
+            { id: 103, name: 'John' }
+        ]
+    }
+
+    toggleShow() {
+        this.show = !this.show;
+    }
+}
+
+
+
+src/app/app.component.html
+--------------------------
+<div>
+  <div class="jumbotron">
+    <h1 class="display-4">Directives</h1>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      Structural Directives
+    </div>
+    <div class="card-body">
+      <div>
+        <h5 class="card-title">NgIf - Structural Directive</h5>
+        <p class="card-text" *ngIf="show">This is a message</p>
+        <button type="button" class="btn btn-primary" (click)="toggleShow()">{{ show?"Hide":"Show" }}</button>
+      </div>
+      <hr>
+      <div>
+        <h5 class="card-title">NgForOf - Structural Directive</h5>
+        <label for="ddlEmployees">Employees</label>
+        <select id="ddlEmployees" class="form-control">
+          <option *ngFor="let employee of employees" [value]="employee.id">{{ employee.name }}</option>
+        </select>
+      </div>
+      <hr>
+      <div>
+        <h5 class="card-title">NgSwitchDefault - Structural Directive</h5>
+        <span>{{ 'Counter : '+ counter }}</span>
+        <hr>
+        <button type="button" class="btn btn-primary" (click)="counter=counter+1">Increment Counter</button>
+       <hr>
+       <div [ngSwitch]="counter">
+          <div *ngSwitchCase="0">Zero</div>
+          <div *ngSwitchCase="1">One</div>
+          <div *ngSwitchCase="2">Two</div>
+          <div *ngSwitchCase="3">Three</div>
+          <div *ngSwitchDefault>Not Supported</div>
+       </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="card">
+    <div class="card-header">
+      Attribute Directives
+    </div>
+    <div class="card-body">
+      <div>
+          <h5 class="card-title">NgClass - Attribute Directive</h5>
+          <button class="btn" [ngClass]="{'btn-primary': isPrimary }" (click)="isPrimary=!isPrimary">Primary Button</button>
+      </div>
+      
+    </div>
+  </div>
+  <br>
+  <div class="card">
+    <div class="card-header">
+      Custom Directives
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">CgButtonHover Directive</h5>
+        <div>
+            <button class="btn" cgBtn data-sty="btn-primary">Primary Button</button>
+            <button class="btn" cgBtn data-sty="btn-success">Success Button</button>
+            <button class="btn" cgBtn data-sty="btn-warning">Warning Button</button>
+            <button class="btn" cgBtn data-sty="btn-danger">Danger Button</button>
+        </div>
+    </div>
+  </div>
+</div> 
